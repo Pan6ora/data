@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang=""><head>
+    <meta charset="UTF-8">
+    <!-- generator meta tag -->
+    <!-- leave this for stats and Silex version check -->
+    <meta name="generator" content="Silex v2.2.9">
+    <!-- End of generator meta tag -->
+    <script type="text/javascript" src="https://editor.silex.me/static/2.9/jquery.js" data-silex-static=""></script>
+    <script type="text/javascript" src="https://editor.silex.me/static/2.9/jquery-ui.js" data-silex-static=""></script>
+    <script type="text/javascript" src="https://editor.silex.me/static/2.9/pageable.js" data-silex-static=""></script>
+    <script type="text/javascript" src="https://editor.silex.me/static/2.9/front-end.js" data-silex-static=""></script>
+    <link rel="stylesheet" href="https://editor.silex.me/static/2.9/normalize.css" data-silex-static="">
+    <link rel="stylesheet" href="https://editor.silex.me/static/2.9/front-end.css" data-silex-static="">
+
+    <style type="text/css" class="silex-style">#map {height: 400px;}</style>
+    <script type="text/javascript" class="silex-script">var lat = 48.852969;
+var lon = 2.349903;
+var macarte = null;
+var markerClusters; // Servira à stocker les groupes de marqueurs
+// Nous initialisons une liste de marqueurs
+var villes = {
+  "Paris": { "lat": 48.852969, "lon": 2.349903 },
+  "Brest": { "lat": 48.383, "lon": -4.500 },
+  "Quimper": { "lat": 48.000, "lon": -4.100 },
+  "Bayonne": { "lat": 43.500, "lon": -1.467 }
+};
+// Fonction d'initialisation de la carte
+function initMap() {
+  var markers = []; // Nous initialisons la liste des marqueurs
+  // Nous définissons le dossier qui contiendra les marqueurs
+  var iconBase = 'https://nouvelle-techno.fr/assets/img/codepen/';
+  // Créer l'objet "macarte" et l'insèrer dans l'élément HTML qui a l'ID "map"
+  macarte = L.map('map').setView([lat, lon], 11);
+  markerClusters = L.markerClusterGroup(); // Nous initialisons les groupes de marqueurs
+  // Leaflet ne récupère pas les cartes (tiles) sur un serveur par défaut. Nous devons lui préciser où nous souhaitons les récupérer. Ici, openstreetmap.fr
+  L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+    // Il est toujours bien de laisser le lien vers la source des données
+    attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+    minZoom: 1,
+    maxZoom: 20
+  }).addTo(macarte);
+  // Nous parcourons la liste des villes
+  for (ville in villes) {
+    // Nous définissons l'icône à utiliser pour le marqueur, sa taille affichée (iconSize), sa position (iconAnchor) et le décalage de son ancrage (popupAnchor)
+    var myIcon = L.icon({
+      iconUrl: iconBase + "pin.png",
+      iconSize: [50, 56],
+      iconAnchor: [25, 50],
+      popupAnchor: [-3, -76],
+    });
+    var marker = L.marker([villes[ville].lat, villes[ville].lon], { icon: myIcon }); // pas de addTo(macarte), l'affichage sera géré par la bibliothèque des clusters
+    marker.bindPopup(ville);
+    markerClusters.addLayer(marker); // Nous ajoutons le marqueur aux groupes
+    markers.push(marker); // Nous ajoutons le marqueur à la liste des marqueurs
+  }
+  var group = new L.featureGroup(markers); // Nous créons le groupe des marqueurs pour adapter le zoom
+    macarte.fitBounds(group.getBounds().pad(0.5)); // Nous demandons à ce que tous les marqueurs soient visibles, et ajoutons un padding (pad(0.5)) pour que les marqueurs ne soient pas coupés
+  macarte.addLayer(markerClusters);
+}
+window.onload = function(){
+  // Fonction d'initialisation qui s'exécute lorsque le DOM est chargé
+  initMap(); 
+};
+
+</script>
+    <style class="silex-inline-styles" type="text/css">.body-initial {background-color: rgba(255,255,255,1);}</style>
+    <title></title>
+    <script type="text/json" class="silex-json-styles">[{"fonts":[{"family":"'Roboto', sans-serif","href":"https://fonts.googleapis.com/css?family=Roboto"}],"desktop":{"body-initial":{"background-color":"rgba(255,255,255,1)"},"silex-id-1474394621032-2":{"min-height":"600px","background-color":"transparent","width":"1200px","top":"","left":"","height":""},"silex-id-1474394605264-1":{"min-height":"100px","width":"100px","top":"100px","left":"100px"},"silex-id-1474394605263-0":{"min-height":"100px","background-color":"transparent"},"silex-id-1442914737143-3":{"min-height":"53px","width":"349px","top":"29px","left":"430px","height":""},"silex-id-1478366444112-0":{"min-height":"100px","background-color":"transparent","width":"1200px","top":"","left":"","height":""},"silex-id-1478366450713-2":{"min-height":"100px","background-color":"transparent","width":"1200px","top":"","left":"","height":""}},"mobile":{},"prodotypeData":{"component":{},"style":{"all-style":{"className":"all-style","templateName":"text","displayName":"All style","styles":{"desktop":{"normal":{"className":"all-style","pseudoClass":"normal","All":{"font-family":"'Roboto', sans-serif"}}}}}}}}]</script>
+
+    
+<style class="silex-prodotype-style" type="text/css" data-style-id="all-style">.text-element > .silex-element-content {font-family: 'Roboto', sans-serif;}</style><link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" class="silex-custom-font"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="hostingProvider" content="unifile"><!-- Silex HEAD tag do not remove --><div id="map">
+  <!-- Ici s'affichera la carte -->
+</div>
+
+<!-- End of Silex HEAD tag do not remove --></head>
+
+<body data-silex-id="body-initial" class="body-initial all-style enable-mobile silex-runtime" data-silex-type="container">
+    <div class="silex-pages">
+        
+
+        <a id="page-page-1" data-silex-type="page" class="page-element" href="#!page-page-1">Page 1</a></div>
+
+
+
+
+
+
+
+
+
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>
